@@ -17,4 +17,4 @@ The problems are sourced from [LeetCode](https://leetcode.com). This repository 
 ### Linked Lists
 - [Add Two Numbers](linked_lists/add_two_numbers.py): Given two linked lists representing two non-negative integers, return the sum as a linked list.
 
-... (add more problems as needed)
+... (and more problems as needed)
