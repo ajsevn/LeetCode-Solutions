@@ -1,5 +1,6 @@
-import math
 from typing import List
+import math
+from collections import defaultdict
 
 class UnionFind:
     def __init__(self, size):
@@ -23,16 +24,39 @@ class UnionFind:
                 self.parent[rootY] = rootX
                 self.rank[rootX] += 1
 
+def prime_factors(n):
+    factors = set()
+    while n % 2 == 0:
+        factors.add(2)
+        n //= 2
+    for i in range(3, int(math.sqrt(n)) + 1, 2):
+        while n % i == 0:
+            factors.add(i)
+            n //= i
+    if n > 2:
+        factors.add(n)
+    return factors
+
 class Solution:
     def canTraverseAllPairs(self, nums: List[int]) -> bool:
         n = len(nums)
+        if n == 1:
+            return True
+        
         uf = UnionFind(n)
-        
-        for i in range(n):
-            for j in range(i + 1, n):
-                if math.gcd(nums[i], nums[j]) > 1:
-                    uf.union(i, j)
-        
+        prime_to_indices = defaultdict(list)
+
+        # Collect indices for each prime factor
+        for i, num in enumerate(nums):
+            for factor in prime_factors(num):
+                prime_to_indices[factor].append(i)
+
+        # Union indices that share a prime factor
+        for indices in prime_to_indices.values():
+            for i in range(1, len(indices)):
+                uf.union(indices[0], indices[i])
+
+        # Check if all indices are connected
         root = uf.find(0)
         for i in range(1, n):
             if uf.find(i) != root:
